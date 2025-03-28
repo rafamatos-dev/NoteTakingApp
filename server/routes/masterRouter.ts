@@ -1,4 +1,4 @@
-import { Router } from "https://deno.land/x/oak/mod.ts";
+import { Router } from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import { noteRouter } from "./noteRoutes.ts";
 import { userRouter } from "./userRoutes.ts";
 

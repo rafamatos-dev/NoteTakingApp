@@ -13,4 +13,18 @@ export const createUserDTO = z.object({
         createdOn: z.date(),
         lastModified: z.date()
     })
-})
+});
+
+export const loginUserDTO = z.object({
+    body: z.object({
+        email: z
+            .string({ required_error: 'Email is required' })
+            .email('Invalid email or password'),
+        password: z
+            .string({ required_error: 'Password is required' })
+            .min(8, 'Invalid email or password'),
+        }),
+});
+
+export type CreateUserInput = z.TypeOf<typeof createUserDTO>['body'];
+export type LoginUserInput = z.TypeOf<typeof loginUserDTO>['body'];

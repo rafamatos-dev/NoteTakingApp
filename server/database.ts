@@ -1,4 +1,4 @@
-import { MongoClient, Database } from "https://deno.land/x/mongo@v0.31.1/mod.ts";
+import { MongoClient, Database } from "https://deno.land/x/mongo@v0.34.0/mod.ts";
 import "jsr:@std/dotenv/load";
 
 export let db: Database | null = null;
@@ -11,13 +11,13 @@ export async function connect() {
     if(!client){
         client = new MongoClient();
         console.log("Connecting to MongoDB...");
-        await client.connect("mongodb://localhost:27017/");
+        await client.connect(Deno.env.get("DEV_CONNECTION_STRING") || "");
 
         if(client.buildInfo?.ok)
             console.log("Connected to MongoDB...");
     }
 
-    db = client.database(Deno.env.get("DB_NAME"));
+    db = client.database(Deno.env.get("DB_NAME") || "");
     return db;
 };
 

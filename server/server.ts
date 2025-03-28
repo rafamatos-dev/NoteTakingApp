@@ -1,6 +1,6 @@
 import { Application } from "https://deno.land/x/oak@v17.1.4/mod.ts";
-import { masterRouter, userRouter, noteRouter } from "./routes/masterRouter.ts";
 import "jsr:@std/dotenv/load";
+import { masterRouter, userRouter, noteRouter } from "./routes/masterRouter.ts";
 import { dbMiddleware } from "./middlewares/db.middleware.ts";
 import { connect, disconnect } from "./database.ts";
 

@@ -1,8 +1,9 @@
 import { RouterContext } from "https://deno.land/x/oak@v17.1.4/mod.ts";
 import { ObjectId } from "https://deno.land/x/mongo@v0.31.1/mod.ts";
 import { Database } from "https://deno.land/x/mongo@v0.31.1/src/database.ts";
+import { CreateUserInput, LoginUserInput } from "../DTO/user.dto.ts";
 
-const getUsers = async ({state, response}: RouterContext<string>) => {
+export const getUsers = async ({state, response}: RouterContext<string>) => {
     try {
         const db: Database = state.db;
         const users = await db.collection("users").find().toArray();
@@ -15,7 +16,7 @@ const getUsers = async ({state, response}: RouterContext<string>) => {
     }
 }
 
-const getUserById = async ({state, response}: RouterContext<string>) => {
+export const getUserById = async ({state, response}: RouterContext<string>) => {
     try {
         const db: Database = state.db;
         const id: string = state.id;
@@ -40,17 +41,16 @@ const getUserById = async ({state, response}: RouterContext<string>) => {
     }
 }
 
-const createUser = async ({state, request, response}: RouterContext<string>) => {
+export const createUser = async ({state, request, response}: RouterContext<string>) => {
     try {
         const db: Database = state.db;
-
         const { 
             firstName,
             lastName,
             email,
             password,
             birthday
-        }: createUserDTO = await request.body().value;
+        }: CreateUserInput = await request.body.json();
 
         const userExists = db.collection("users").find({email}); 
 
@@ -87,20 +87,4 @@ const createUser = async ({state, request, response}: RouterContext<string>) => 
         response.body = { error: "Failed to fetch users"}
         console.error("Error in getUsers: ", err);
     }
-}
-
-const updateUser = async ({state, request, response}: RouterContext<string>) => {
-
-}
-
-const deleteUser = async ({state, request, response}: RouterContext<string>) => {
-
-}
-
-export default {
-    getUsers,
-    getUserById,
-    createUser,
-    updateUser,
-    deleteUser
 }
