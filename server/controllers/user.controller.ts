@@ -57,7 +57,7 @@ const createUser = async ({state, request, response}: RouterContext<string>) => 
         if(userExists !== undefined){
             response.status = 409;
             response.body = {
-                status: "Failed",
+                status: "warning",
                 message: "Email already registered"
             };
             return;
@@ -80,6 +80,13 @@ const createUser = async ({state, request, response}: RouterContext<string>) => 
             response.status = 500;
             response.body = { status: 'error', message: 'Error creating user' };
             return;
+        }
+
+        response.status = 200;
+        response.body = {
+            _id: userid,
+            message: "User created succesfully",
+            status: "success"
         }
 
     } catch (err) {
