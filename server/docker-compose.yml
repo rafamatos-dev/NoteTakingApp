@@ -1,0 +1,40 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    hostname: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    networks:
+      - app-network
+
+  deno-server:
+    image: denoland/deno:latest
+    container_name: deno-server
+    restart: always
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "${PORT}:${PORT}"
+    command: >
+      run --allow-net --allow-env --allow-read --allow-sys --env --watch server.ts
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo_data:

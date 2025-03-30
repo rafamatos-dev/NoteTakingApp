@@ -11,13 +11,19 @@ export async function connect() {
     if(!client){
         client = new MongoClient();
         console.log("Connecting to MongoDB...");
-        await client.connect(Deno.env.get("DEV_CONNECTION_STRING") || "");
+        
+        const connectionString = Deno.env.get("DEV_CONNECTION_STRING") || "";
+        console.log(`Using connection string: ${connectionString}`);
+        
+        await client.connect(connectionString);
 
         if(client.buildInfo?.ok)
             console.log("Connected to MongoDB...");
     }
 
-    db = client.database(Deno.env.get("DB_NAME") || "");
+    const dbName = Deno.env.get("DB_NAME") || "";
+    console.log(`Using database: ${dbName}`);
+    db = client.database(dbName);
     return db;
 };
 
@@ -32,7 +38,7 @@ export async function disconnect() {
 
 export function getDB(){
     if(!db){
-        throw new Error("Database connection not stablished");
+        throw new Error("Database connection not established");
     }
 
     return db;
